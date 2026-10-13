@@ -152,3 +152,12 @@ ctest --test-dir build/desktop --output-on-failure
 - **Opcode Coverage**: Core gameplay, dialogue flow, branching choices, voice playback, background transitions, CG displays, BGM, and system menus are functional. Roughly 39% of less common opcodes fall through to default stub behavior (see `docs/RE-HANDOFF.md` §12).
 - **Save Compatibility**: Saves cannot be imported from or exported to the original D.C.4 Windows binary.
 - **Work in Progress**: Not an official product of CIRCUS. This is an independent, clean-room reverse-engineering project created entirely with LLMs for preservation and research purposes.
+
+---
+
+## Legal & Trademark Notice
+
+- **D.C.4 ~Da Capo 4~** and **CIRCUS / adv32** are trademarks and copyrighted intellectual property of **CIRCUS / CIRCUS-NORTH**.
+- This project is an independent, clean-room reimplementation developed strictly for educational, interoperability, and preservation purposes.
+- No copyrighted game assets, scripts (`.mes`), images (`.crx`/`.crm`), or audio streams (`.xpcm`/`VOICE.DAT`) are bundled or distributed with this repository. Users must own and provide their own legitimate copy of the game.
+

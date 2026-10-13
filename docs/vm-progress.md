@@ -9,8 +9,7 @@ established.
 
 The user-supplied IDA MCP endpoint was `http://127.0.0.1:13337/mcp`. Its live
 `server_health` reported module `DC4.EXE`, image base `0x400000`, ready Hex-Rays,
-and database `F:\DC4 new\DC4\DC4.EXE.i64`; the database still retains the old
-`G:\DC4 new\DC4\DC4.EXE` input path. No binary patches, renames, or saved
+and database `DC4.EXE.i64`. No binary patches, renames, or saved
 database changes were requested or made in this pass.
 
 Full direct-MCP decompilations, including address markers, are retained as
@@ -59,7 +58,7 @@ The normal CTest target uses synthetic fixtures, so it needs no game assets.
 An optional argument to `mesvm_test` enables local game-data regressions:
 
 ```powershell
-.\build\desktop\mesvm_test.exe 'F:\DC4 new\DC4\AdvData\MES'
+.\build\desktop\mesvm_test.exe 'D:\Games\DC4\AdvData\MES'
 ```
 
 Verified with MSVC 14.51 on this date:

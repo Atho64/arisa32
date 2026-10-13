@@ -23,15 +23,15 @@ standing rule).
 - Working dir conventions: RE artifacts in `work/`, disassemblies in
   `work/menu/*.txt`, IDA dumps in `.ida-mcp/`.
 
-Original game data assumed at `F:\DC4 new\DC4\AdvData` (the desktop shell
+Original game data assumed at `../DC4/AdvData` (the desktop shell
 takes the data dir as argv[1], or `DC4_ADVDATA` env for the .bat helpers).
-IDA database: `F:\DC4 new\DC4\DC4.EXE.i64` (open in IDA with the MCP plugin).
+IDA database: `DC4.EXE.i64` (open in IDA with the MCP plugin).
 
 ## 2. Build / run / test
 
 ```
 build.bat                     # MSVC x64 env + cmake + ninja, builds everything
-build\desktop\dc4_desktop.exe "F:\DC4 new\DC4\AdvData" [--scene X --line N]
+build\desktop\dc4_desktop.exe "D:\Games\DC4\AdvData" [--scene X --line N]
     --shot out.bmp            # headless single-frame screenshot
     --panel save|load|backlog|title|extras|config|gallery|music|scenes|movies
     --line N                  # advance to dialogue index N (0-based)
@@ -49,8 +49,8 @@ F5/F9 quick save/load, SAVE/LOAD buttons → 100 slots across ten pages, A auto,
 S skip, V voice replay, Esc quit. Android: full touch shell (auto/skip/backlog/
 save/load with picker) — see `android/README.md`.
 
-Note: mesdis (a native Windows binary) needs a native path — MSYS `/f/...`
-paths fail; use `F:\DC4 new\...`.
+Note: mesdis (a native Windows binary) needs a native path — MSYS `/c/...`
+paths fail; use standard Windows drive paths like `C:\...` or `D:\...`.
 
 ## 3. Formats (all RE'd, see findings.md for byte layouts)
 
