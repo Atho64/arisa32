@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ArisaTheme" parent="android:style/Theme.Material.NoActionBar">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:colorAccent">#38BDF8</item>
+        <item name="android:colorControlHighlight">#2538BDF8</item>
+        <item name="android:windowBackground">#0B1017</item>
+        <item name="android:statusBarColor">#0B1017</item>
+        <item name="android:navigationBarColor">#0B1017</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:alertDialogTheme">@style/ArisaDialog</item>
+    </style>
+    <style name="ArisaDialog" parent="android:style/Theme.Material.Dialog.Alert">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:colorAccent">#38BDF8</item>
+        <item name="android:textColorPrimary">#E2E8F0</item>
+        <item name="android:textColorSecondary">#94A3B8</item>
+        <item name="android:colorBackground">#131B26</item>
+        <item name="android:windowBackground">@drawable/arisa_dialog</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:listPreferredItemHeightSmall">52dp</item>
+    </style>
+</resources>

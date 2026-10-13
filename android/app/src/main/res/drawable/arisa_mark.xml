@@ -1,0 +1,27 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Outer Shield / Container -->
+    <path
+        android:fillColor="#101722"
+        android:strokeColor="#2A3F5B"
+        android:strokeWidth="2"
+        android:pathData="M18,12 L90,12 A6,6 0 0,1 96,18 L96,72 A24,24 0 0,1 72,96 L36,96 A24,24 0 0,1 12,72 L12,18 A6,6 0 0,1 18,12 Z" />
+    
+    <!-- Circus Diamond / Star Crest at top -->
+    <path
+        android:fillColor="#F59E0B"
+        android:pathData="M54,18 L58,25 L65,25 L60,30 L62,37 L54,33 L46,37 L48,30 L43,25 L50,25 Z" />
+
+    <!-- Letter A (Arisa / adv32) in Electric Cyan -->
+    <path
+        android:fillColor="#38BDF8"
+        android:pathData="M32,84 L40,84 L44,72 L58,72 L62,84 L70,84 L55,42 L47,42 Z M47,63 L51,51 L55,63 Z" />
+
+    <!-- Engine "32" accent badge / underline -->
+    <path
+        android:fillColor="#F59E0B"
+        android:pathData="M74,70 L84,70 L84,73 L74,73 Z M74,78 L84,78 L84,81 L74,81 Z" />
+</vector>
