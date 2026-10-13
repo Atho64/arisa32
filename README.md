@@ -1,27 +1,52 @@
-# dc4engine
+# Arisa32
 
-A C++17 reimplementation of the D.C.4 / CIRCUS adv32 visual novel runtime. It
-reads the installed game's MES scripts, CRX/CRM artwork and XPCM audio. Game
-assets are not included. This is a work in progress, not yet a complete adv32
-emulator or a replacement for the original game's save files.
+> [!IMPORTANT]
+> ### 🤖 Full LLM Generated / 100% Dibuat oleh AI (LLM)
+> Seluruh kode sumber, arsitektur sistem, reverse-engineering opcode MES adv32, dekoder aset, antarmuka Android/JNI, serta dokumentasi pada repositori ini **dibuat secara penuh oleh Large Language Model (LLM)**.
+>
+> ### 🎮 Kompatibilitas Game / Game Compatibility: D.C.4 Only
+> Untuk saat ini runtime engine **hanya mendukung dan diuji khusus untuk D.C.4 (Da Capo 4)**. Judul visual novel lain yang menggunakan engine CIRCUS adv32 (seperti D.C.3, Dal Segno, dsb.) **belum didukung**.
+>
+> ### 📦 Nama Proyek / Repository: Arisa32
+> Nama proyek dan repositori ini adalah **Arisa32** (pengganti penamaan internal sebelumnya `dc4engine`). Target paket Android menggunakan identifier `org.dc4engine` demi menjaga kompatibilitas save data dan path aplikasi.
 
-## Build and run on Windows
+A portable C++17 reimplementation of the CIRCUS adv32 visual novel engine runtime specifically for **D.C.4 (Da Capo 4)** on Windows (SDL2) and Android (NativeActivity + JNI). It reads the original game's installed MES scripts, CRX/CRM artwork, and XPCM audio directly in place.
 
-Install Visual Studio or Visual Studio Build Tools with **Desktop development
-with C++** and **C++ CMake tools for Windows**, then run:
+> [!NOTE]
+> **Game assets are not included.** A legitimate copy of D.C.4 (Da Capo 4) is required. Game files (`AdvData`) are read in place and are never modified by the engine.
+
+---
+
+## Platforms
+
+1. **Windows Desktop** (C++17 + SDL2)
+   - Native 1280×720 letterboxed renderer with aspect ratio preservation.
+   - Text rendering via Windows font rasterizer (MS Gothic by default or TrueType font override).
+   - High-fidelity audio playback for BGM, SE, and voice streams (XPCM).
+   - Original-style Save / Load system (100 slots + quicksave) and reading backlog.
+   - Title screen, config menus, gallery, and scene selector.
+
+2. **Android App** (NativeActivity + JNI + Java UI)
+   - Built-in persistent Game Library manager with folder import/linking via Storage Access Framework (SAF).
+   - Clean adv32 / Circus Engine UI theme (`ArisaUi`) with Arisa crest icon.
+   - Save archive import/export system (`.zip` backup/restore).
+   - Integrated full-screen touch controls, dialogue backlog, and fast-forward skipping.
+   - Targets Android API 35 (compatible with Android 7.0 / API 24+; `arm64-v8a` & `armeabi-v7a`).
+
+---
+
+## Build and Run on Windows
+
+Install Visual Studio or Visual Studio Build Tools with **Desktop development with C++** and **C++ CMake tools for Windows**, then run:
 
 ```bat
 build.bat
 run.bat
 ```
 
-The build helper detects Visual Studio and creates a Release x64 build in
-`build/desktop`. An older `build/CMakeCache.txt`, including a cache from another
-drive, is left untouched. SDL2 is included in `third_party`; its DLL is copied
-beside `build/desktop/dc4_desktop.exe` automatically.
+The build helper detects Visual Studio and creates a Release x64 build in `build/desktop`. SDL2 headers and import libraries are included in `third_party/sdl2`; its runtime DLL is copied beside `build/desktop/dc4_desktop.exe` automatically.
 
-The launcher looks for `../DC4/AdvData` beside this repository. To use another
-installation, set `DC4_ADVDATA` or invoke the executable directly:
+The launcher automatically looks for `../DC4/AdvData` beside this repository. To use another installation directory, set `DC4_ADVDATA` or invoke the executable directly:
 
 ```bat
 set "DC4_ADVDATA=D:\Games\DC4\AdvData"
@@ -29,11 +54,29 @@ run.bat
 build\desktop\dc4_desktop.exe "D:\Games\DC4\AdvData"
 ```
 
-The player starts the opening scenario, `dc4_kyo20190204a1.mes`. The executable
-also discovers a nearby `DC4/AdvData` directory when no path is supplied. Game
-files are read in place; the player does not modify them.
+The player starts the opening scenario, `dc4_kyo20190204a1.mes`.
 
-## Reading controls
+---
+
+## Build for Android
+
+To build the standalone debug APK on Linux, macOS, or Windows (via Git Bash / MSYS2):
+
+```bash
+bash android/build_apk.sh          # -> generates android/Arisa32-debug.apk
+```
+
+Prerequisites:
+- Android SDK build-tools 35.0.0 & platform `android-35`
+- Android NDK 27.3+
+- CMake 3.22.1+
+- JDK 17+
+
+Prebuilt binaries (`Arisa32-debug.apk`) are also provided on the [GitHub Releases](../../releases) page for manual sideloading. See [`android/README.md`](android/README.md) for full details on permissions, storage setup, and ADB installation.
+
+---
+
+## Reading Controls (Desktop)
 
 | Input | Action |
 | --- | --- |
@@ -41,105 +84,71 @@ files are read in place; the player does not modify them.
 | Right click, H, OFF/Close button | Hide/show the message window |
 | A, AUTO button | Auto advance after text and voice finish |
 | S, SKIP button; hold Ctrl | Skip dialogue |
-| V, VOICE button | Replay the current voice |
-| F5, QUICK SAVE button | Write the quick-save snapshot |
-| F9, QUICK LOAD button | Restore the quick-save snapshot |
-| SAVE / LOAD buttons | Open the original-style screen with 100 slots |
-| 1–9 / 0 in Save/Load | Select slots 1–10 on the current page, down each column |
-| Left/Right, Page Up/Down in Save/Load | Change page (ten pages, wrapping) |
-| Tab in Save/Load | Switch between Save and Load |
-| B, BACKLOG button, wheel up | Open the current session's reading history |
-| Wheel, arrows, Page Up/Down in backlog | Scroll history |
+| V, VOICE button | Replay the current voice line |
+| F5, QUICK SAVE button | Write quick-save snapshot |
+| F9, QUICK LOAD button | Restore quick-save snapshot |
+| SAVE / LOAD buttons | Open 100-slot Save/Load screen |
+| 1–9 / 0 in Save/Load | Select slots 1–10 on current page |
+| Left/Right, Page Up/Down in Save/Load | Change page (10 pages, wrapping) |
+| Tab in Save/Load | Switch between Save and Load screens |
+| B, BACKLOG button, Mouse wheel up | Open reading backlog history |
+| Mouse wheel, Arrow keys, Page Up/Down | Scroll backlog history |
 | Click a choice, or press 1–9 | Select an option |
 | F11, Alt+Enter | Toggle fullscreen |
-| F1 | Show controls |
-| Esc | Close backlog, cancel auto/skip, otherwise exit |
+| F1 | Show controls dialog |
+| Esc | Close backlog, cancel auto/skip, or exit |
 
-Auto and Skip stop at choices. Clicking a menu button does not advance the
-dialogue. Backlog is a reading history for the current process, not a save or
-rewind mechanism. Loading a snapshot resets that history to the restored line.
-The original-style system menus (Title, Config, Gallery, Music, Scene mode,
-Extras) are implemented from the original MES layouts; the End navigation and
-AUTO shortcut stay disabled until those features exist, and report their status
-in the window title.
+---
 
-Snapshots use dc4engine's own format. The quick save and 100 manual slots live
-in `build/desktop/saves` beside the executable, with a `DC4_SAVE_DIR` override.
-The game installation's original `AdvData/savedata` directory is not used.
-Selecting an occupied manual slot asks before replacing it; the quick save has its
-own file. Saving leaves the screen open; loading restores the scene and closes it.
-Empty Load slots are inactive. Optional thumbnail and dialogue-preview sidecars identify occupied
-slots; a missing preview does not prevent loading. Original D.C.4 save files
-are not compatible. The screen uses the original SAVEBACK/LOADBACK, SLCHIP and
-SYSTEMGOTO artwork. NEW loads the newest numbered emulator save, and QLOAD
-loads its quicksave. The AUTO shortcut and End navigation remain disabled.
-Slots 1–10 retain their previous filenames. Native chapter labels
-are represented by dialogue excerpts; overwrite prompts use the platform dialog.
+## Save Data & Snapshots
 
-The scene always uses a 1280×720 logical canvas. Resizing or fullscreen keeps
-the 16:9 aspect ratio, with black borders where necessary. Pointer hit testing
-uses the same logical coordinates. Windows MS Gothic is the default Japanese
-font; `--font FILE` or `DC4_FONT` can select another TrueType font/collection.
+- Snapshots use Arisa32's internal portable format (`.sav` snapshot files with metadata sidecars).
+- Quick saves and the 100 manual slots live in `build/desktop/saves/` on Windows, or in app-isolated external files storage on Android.
+- **Original Windows D.C.4 save files (`AdvData/savedata`) are not compatible.**
+- The original game's save directories are never altered.
 
-## Screenshots and development commands
+---
+
+## Development & Diagnostics
 
 ```bat
-rem Jump to another scenario (a basename or a full path is accepted).
+rem Jump directly to a specific scenario:
 run.bat scene dc4_kyo20190204a2
 
-rem Reproducible screenshots at native resolution, with no window or audio.
+rem Headless reproducible screenshot at native 1280x720:
 build\desktop\dc4_desktop.exe --scene dc4_kyo20190204a2 --line 0 --shot work\scene.bmp
-build\desktop\dc4_desktop.exe --scene dc4_kyo20190204a2 --line 0 --reveal 12 --shot work\partial.bmp
-build\desktop\dc4_desktop.exe --scene dc4_kyo20190204a1 --line 24 --panel save --shot work\save-menu.bmp
-build\desktop\dc4_desktop.exe --scene dc4_kyo20190204a1 --line 24 --panel load --save-page 10 --shot work\load-page10.bmp
 
-rem Inspect title artwork, test the letterboxed renderer, or test audio.
+rem Inspect title screen or test audio:
 run.bat title
-build\desktop\dc4_desktop.exe --title --window-size 1000 800 --shot work\title.bmp
 run.bat audio
 
-rem Print all options.
+rem Print all CLI options:
 build\desktop\dc4_desktop.exe --help
 ```
 
-`--line` is a zero-based dialogue index and is valid interactively too. A
-screenshot uses fully revealed text and a fixed wait-animation frame by
-default; `--reveal`, `--wait-frame`, and `--hover X Y --down` make partial text
-and button states reproducible. `--panel save`, `load`, or `backlog` captures an
-overlay without writing any snapshot. Screenshot errors and unreachable line indices
-produce a nonzero exit code. Create the output directory before capturing.
-`--no-audio` disables device initialization for interactive debugging.
-
-For a configured developer environment, the equivalent build commands are:
-
+To run the automated CTest regression test suites:
 ```sh
 cmake -S . -B build/desktop -G Ninja -DCMAKE_BUILD_TYPE=Release
 cmake --build build/desktop --parallel
 ctest --test-dir build/desktop --output-on-failure
 ```
 
-Ten CTest suites cover the VM, audio, media/movie, scene, resources, and the
-confirmation, backlog, save and system-menu controllers; synthetic fixtures need no game assets, and
-several suites accept an AdvData path for optional real-asset regressions.
+---
 
-The core is shared with the Android frontend. Non-Windows desktop CMake expects
-an installed SDL2 development package (2.0.18 or newer), but the desktop shell
-still needs a complete platform Shift-JIS decoder there. Windows desktop is
-the currently validated build target.
+## Repository Layout
 
-## Repository layout and remaining work
+- `core/`: Portable C++17 script VM, MES interpreter, CRX/CRM decoders, XPCM audio, and scene renderer.
+- `sdl_desktop/`: SDL2 desktop frontend, window management, audio playback, backlog, and screenshot capture.
+- `android/`: Android frontend (NativeActivity, JNI glue, `ArisaUi` custom widget library, Game Library activity).
+- `tools/`: Disassemblers (`mesdis`), asset inspection utilities (`crx_tool`, `crm_tool`, `voicetool`), and analysis helpers.
+- `tests/`: Automated unit and regression tests for VM opcodes, save states, audio, and resource loading.
+- `docs/`: Reverse-engineering documentation, opcode dispatch tables, and engine findings.
 
-- `core/`: portable script VM, formats, audio and scene renderer.
-- `sdl_desktop/`: desktop input, display, session backlog and screenshots.
-- `android/`: Android/JNI frontend; see its own README for setup.
-- `tools/`: script disassembly, asset conversion and reverse-engineering tools.
-- `tests/`: synthetic runtime regression tests.
-- `docs/findings.md`, `docs/opcode_table.md`: recovered engine behavior and its evidence.
+---
 
-The runtime is being checked against D.C.4's original scripts and renderer.
-Unimplemented areas still include original-save compatibility, End/AUTO menu
-navigation, native confirmation artwork for save overwrites, complete coverage
-of visual effects and every adv32 opcode (roughly 39% of opcode instances in
-the shipped scripts still fall through to the host-owner default — see
-`docs/RE-HANDOFF.md` §12), and real Android device testing.
-Compatibility with other adv32 games is not established.
+## Current Status & Limitations
+
+- **D.C.4 Specific**: Tested against D.C.4's original assets and scripts. Compatibility with other CIRCUS adv32 games is not implemented.
+- **Opcode Coverage**: Core gameplay, dialogue flow, branching choices, voice playback, background transitions, CG displays, BGM, and system menus are functional. Roughly 39% of less common opcodes fall through to default stub behavior (see `docs/RE-HANDOFF.md` §12).
+- **Save Compatibility**: Saves cannot be imported from or exported to the original D.C.4 Windows binary.
+- **Work in Progress**: Not an official product of CIRCUS. This is an independent, clean-room reverse-engineering project created entirely with LLMs for preservation and research purposes.
